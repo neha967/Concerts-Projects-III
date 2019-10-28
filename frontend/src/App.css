@@ -1,0 +1,48 @@
+.bg-img {
+  background: url("./images/event-bg.jpg") center no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+}
+
+input {
+  font-size: 22px;
+}
+
+.each {
+  width: 50vw;
+  height: 100vh;
+}
+
+.signup-div, .login-div {
+  background: url("./images/event-bg.jpg") center no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+.oops {
+  animation: coloreffect 2s infinite;
+}
+
+a{
+  cursor: pointer
+}
+
+@keyframes coloreffect {
+  0% {color: red};
+  25% {color: #bf55ec};
+  50% {color: white};
+  100% {color: #bf55ec};
+}
+
+@media only screen and (max-width: 640px) {
+    .detail-div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .each {
+      width: 100vw;
+      height: 100vh;
+    }
+}
