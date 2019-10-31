@@ -6,9 +6,10 @@ const cors = require("cors");
 const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require("express-session");
+const path = require("path")
 
 mongoose
-  .connect('mongodb://localhost/concerts', {useNewUrlParser: true})
+  .connect(process.env.NewDB, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -19,10 +20,15 @@ mongoose
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors({
-  "origin": "http://localhost:3000",
-  "credentials": true
-}));
+
+if(process.env.ENVIRONMENT === "DEVELOPMENT"){
+  app.use(cors({
+    "origin": `${process.env.HOST}:${process.env.PORT}`,
+    "credentials": true
+  }));  
+}
+
+app.use(express.static(path.join(__dirname+"/public/build")))
 
 app.use(session({
   secret: "basic-auth-secret",

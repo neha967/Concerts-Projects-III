@@ -8,7 +8,7 @@ class Spots extends Component{
     constructor(props){
         super(props);
         this.state = {
-            venues: this.props.venues,
+            venues: this.props.venues || [],
             filteredVenues: []
         }
     }
@@ -35,11 +35,11 @@ class Spots extends Component{
             {this.state.filteredVenues.length > 0 ? 
                 <div>
                 <Nav/>
-                <input type="text" placeholder="Filter by city" onChange={this.changeHandler}/>
+                <input  className="text-center d-block mx-auto my-3 border border-top-0 border-right-0 border-left-0" type="text" placeholder="Filter by city" onChange={this.changeHandler}/>
                 {this.state.filteredVenues.map(venue=>(                
                 <div className="border border-top-0 border-right-0 border-left-0 my-3 p-3">
                     <h3 className="text-primary">{venue.displayName}</h3>
-                    <p><span className="font-weight-bold">Hosting city:</span>{venue.metroArea.displayName}, {venue.metroArea.country.displayName}</p>
+                    <p><span className="font-weight-bold mr-2">Hosting city:</span>{venue.metroArea.displayName}, {venue.metroArea.country.displayName}</p>
                     <Link to={`/events/${venue.id}`} className="btn btn-primary">Check Events</Link>
                 </div>
             ))}
@@ -47,11 +47,11 @@ class Spots extends Component{
             :
             <div>
                 <Nav/>
-                <input type="text" placeholder="Filter by city" onChange={this.changeHandler}/>
-                {this.state.venues.map(venue=>(               
+                <input type="text" className="text-center d-block mx-auto my-3 border-top-0 border-right-0 border-left-0" placeholder="Filter by city" onChange={this.changeHandler}/>
+                {this.state.venues && this.state.venues.map(venue=>(               
                 <div className="border border-top-0 border-right-0 border-left-0 my-3 p-3">
                     <h3 className="text-primary">{venue.displayName}</h3>
-                    <p><span className="font-weight-bold">Hosting city:</span>{venue.metroArea.displayName}, {venue.metroArea.country.displayName}</p>
+                    <p><span className="font-weight-bold mr-2">Hosting city:</span>{venue.metroArea.displayName}, {venue.metroArea.country.displayName}</p>
                     <Link to={`/events/${venue.id}`} className="btn btn-primary">Check Events</Link>
                 </div>
             ))}
@@ -63,13 +63,3 @@ class Spots extends Component{
 }
 
 export default withRouter(Spots)
-
-// {this.props.venues.map(venue=>(
-//     <>
-//     <div className="border border-top-0 border-right-0 border-left-0 my-3 p-3">
-//         <h3 className="text-primary">{venue.displayName}</h3>
-//         <p><span className="font-weight-bold">Hosting city:</span>{venue.metroArea.displayName}, {venue.metroArea.country.displayName}</p>
-//         <Link to={`/events/${venue.id}`} className="btn btn-primary">Check Events</Link>
-//     </div>
-//     </>
-// ))}

@@ -80,33 +80,6 @@ router.post("/login", (req,res,next) => {
     })
 })
 
-// router.post("/fb-login", (req,res)=> {
-//     User.findOne({"facebookId": req.body.facebookId})
-//         .then((user)=> {
-//             debugger
-//             if(!user){
-
-//                 let fbUser = new User({
-//                     username: req.body.username,
-//                     email: req.body.email,
-//                     facebookId: req.body.facebookId
-//                 })
-
-//                 fbUser.save()
-//                 .then(user=>{
-//                     req.session.user = user
-//                     res.json(user)
-//                 })
-//                 .catch(error=>console.log(error))
-
-//             } else{
-//                 req.session.user = user
-//                 res.json(user)
-//             }
-//         })
-//         .catch(error=>console.log(error))
-// })
-
 router.post("/send-reset", (req,res)=> {
     jwt.sign({email: req.body.email}, process.env.jwtSecret, { expiresIn: 60 * 60 }, function(err, token){
         
@@ -117,7 +90,7 @@ router.post("/send-reset", (req,res)=> {
                 to: req.body.email, 
                 subject: 'Reset your password ✔', 
                 text: 'Hello world?', 
-                html: `<b>Password reset: <a href="http://localhost:3000/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
+                html: `<b>Password reset: <a href="https://ironhack-concerts.herokuapp.com/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
             })
             .then((result)=> {
                 debugger

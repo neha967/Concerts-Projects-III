@@ -105,7 +105,7 @@ class Event extends Component {
         
         let user = JSON.parse(localStorage.getItem("user"));
 
-        axios({
+        Axios({
             method: "POST",
             url: `${process.env.REACT_APP_API}/auth/favorites/delete/${user._id}/${eventId}`
         })

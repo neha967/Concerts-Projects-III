@@ -23,9 +23,11 @@ class Home extends Component {
 
         axios.get(`https://api.songkick.com/api/3.0/search/venues.json?query=${this.state.keywords}&apikey=${process.env.REACT_APP_KEY}`)
         .then(response=>{
+            debugger
             this.setState({
-                venues: response.data.resultsPage.results.venue
+                venues: response.data.resultsPage.results.venue || []
             })
+            
         })
         .catch(error=>{
             console.log(error)
