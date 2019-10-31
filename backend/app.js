@@ -6,11 +6,6 @@ const cors = require("cors");
 const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require("express-session");
-const UserRoute = require("./routes/user");
-// const passportSetup = require("./config/passport-setup");
-// const keys = require("./config/keys");
-// const cookieSession = require("cookie-session");
-// const passport = require("passport");
 
 mongoose
   .connect('mongodb://localhost/concerts', {useNewUrlParser: true})
@@ -25,8 +20,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
-  "origin": "*"
-  // "credentials": true
+  "origin": "http://localhost:3000",
+  "credentials": true
 }));
 
 app.use(session({
@@ -36,18 +31,17 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000},
 }));
 
-// app.use(cookieSession({
-//   maxAge: 24 * 60 * 60 * 1000,
-//   keys: [keys.session.cookieKey]
-// }));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const UserRoute = require("./routes/user");
 app.use("/auth", UserRoute);
+
+const FavoriteRoute = require("./routes/favorites");
+app.use("/auth", FavoriteRoute);
+
+const FacebookRoute = require("./routes/facebook");
+app.use("/auth", FacebookRoute);
 
 const userRoute = require("./chatkit/connect")
 app.use("/", userRoute);

@@ -1,5 +1,5 @@
 import Chatkit from '@pusher/chatkit-client';
-import axios from 'axios';
+import axios from "../../utils/axiosInstance"
 
 function handleInput(event) {
       const { value, name } = event.target;
@@ -8,7 +8,7 @@ function handleInput(event) {
       });
 }
 
-function connectToRoom(id = "cd7a5059-10df-4620-866d-7122612fe4f7") {
+function connectToRoom(id = "d1725b35-c95a-49e9-a454-b6be719a8acb") {
         const { currentUser } = this.state;
   
         this.setState({
@@ -55,26 +55,24 @@ function connectToRoom(id = "cd7a5059-10df-4620-866d-7122612fe4f7") {
           .catch(console.error);
 }
 
-function connectToChatkit(event) {
-      event.preventDefault();
+function connectToChatkit(username) {      
 
-      const { userId } = this.state;
-
-      if (userId === null || userId.trim() === '') {
+      if (username === null || username.trim() === '') {
         alert('Invalid userId');
         return;
       }
 
       axios
-        .post(`${process.env.REACT_APP_API}/users`, { userId })
-        .then(() => {
+        .post(`${process.env.REACT_APP_API}/users`, { username })
+        .then((response) => {
+          const username = response.data
           const tokenProvider = new Chatkit.TokenProvider({
             url: `${process.env.REACT_APP_API}/authenticate`,
           });
 
           const chatManager = new Chatkit.ChatManager({
             instanceLocator: `${process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR}`,
-            userId,
+            userId: username,
             tokenProvider,
           });
 
@@ -152,7 +150,6 @@ function sendMessage(event) {
   }
 
   function sendDM(id) {
-      debugger
     createPrivateRoom.call(this, id).then(room => {
       connectToRoom.call(this, room.id);
     });

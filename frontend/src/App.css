@@ -10,8 +10,8 @@ input {
 }
 
 .each {
-  width: 50vw;
-  height: 100vh;
+  width: 20vw;
+  height: 50vh;
 }
 
 .signup-div, .login-div {
@@ -44,5 +44,9 @@ a{
     .each {
       width: 100vw;
       height: 100vh;
+    }
+
+    .main-txt {
+      text-align: center;
     }
 }

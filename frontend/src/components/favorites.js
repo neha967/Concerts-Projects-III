@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import axios from "axios";
+import axios from "../utils/axiosInstance"
 import { Link } from "react-router-dom";
 
 class Favorite extends Component{

@@ -10,7 +10,9 @@ import Base from "./components/index";
 import Nav from "./components/nav";
 import {withRouter} from "react-router-dom";
 import Favorite from "./components/favorites";
-import Connect from "./components/connect";
+import Connect from "./components/chat/connect";
+import Reset from "./components/resetPassword";
+import SendReset from "./components/sendReset";
 
 const PrivateRoute = ({ component: Component, loggedIn, ...rest }) => (
   
@@ -55,13 +57,15 @@ class App extends Component {
     return (
       <>
       {this.navDisplay() ? null : <Nav/>}
-        <Route path="/" exact component={Base}/>
+        <Route path="/" exact render={(routeProps)=> <Base {...routeProps} user={this.checkForUserStatus}/>}/>
         <PrivateRoute path="/home" exact component={Home} loggedIn={this.state.loggedIn}/>
         <PrivateRoute path="/events/:id" exact component={Event} loggedIn={this.state.loggedIn}/>
         <PrivateRoute path="/event-details/:id" exact component={Detail} loggedIn={this.state.loggedIn}/>
         <PrivateRoute path="/favorites" exact component={Favorite} loggedIn={this.state.loggedIn}/>
         <PrivateRoute path="/connect" exact component={Connect} loggedIn={this.state.loggedIn}/>
         <Route path="/auth/signup" exact render={(routeProps)=> <Signup {...routeProps} user={this.checkForUserStatus}/>}/>
+        <Route path="/auth/send-reset" exact render={(routeProps)=> <SendReset {...routeProps} user={this.checkForUserStatus}/>}/>
+        <Route path="/auth/reset-password" exact render={(routeProps)=> <Reset {...routeProps} user={this.checkForUserStatus}/>}/>
         <Route path="/auth/login" exact render={(routeProps)=> <Login {...routeProps} user={this.checkForUserStatus}/>}/>
       </>
     );

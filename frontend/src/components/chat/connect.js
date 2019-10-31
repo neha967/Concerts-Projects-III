@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { handleInput, connectToChatkit, connectToRoom, sendMessage, sendDM } from './methods';
-import Dialog from './dialog';
 import RoomList from './RoomList';
 import ChatSession from './ChatSession';
 import RoomUsers from './RoomUsers';
-// import 'skeleton-css/css/normalize.css';
-// import 'skeleton-css/css/skeleton.css';
-import "../chat.css";
+import "./chat.css";
 
 class Connect extends Component{
     constructor() {
@@ -29,6 +26,14 @@ class Connect extends Component{
         this.connectToRoom = connectToRoom.bind(this);
         this.sendMessage = sendMessage.bind(this);
         this.sendDM = sendDM.bind(this);
+      }
+
+      componentDidMount(){
+        let user = JSON.parse(localStorage.getItem("user"))
+
+        let username = user.username
+
+        this.connectToChatkit(username);
       }
 
       render() {
@@ -92,13 +97,13 @@ class Connect extends Component{
                     />
                 ) : null}
 
-                {showLogin ? (
+                {/* {showLogin ? (
                     <Dialog
                     userId={userId}
                     handleInput={this.handleInput}
                     connectToChatkit={this.connectToChatkit}
                     />
-                ) : null}
+                ) : null} */}
             </aside>
           </div>
         );

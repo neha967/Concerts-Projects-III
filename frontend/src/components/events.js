@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "axios"
+import Axios from "../utils/axiosInstance";
 import { Link } from "react-router-dom";
 
 class Event extends Component {
@@ -8,7 +9,9 @@ class Event extends Component {
         super(props);
         this.state = {
             events: [],
-            favorites: []
+            favorites: [],
+            hover: false,
+            selectedEvents: []
         }
     }
 
@@ -16,14 +19,21 @@ class Event extends Component {
         let user = JSON.parse(localStorage.getItem('user'))
         let venueId = this.props.match.params.id
         
-        //request backend to get favvorites collection related to user and update state
-
         axios.get(`https://api.songkick.com/api/3.0/venues/${venueId}/calendar.json?apikey=${process.env.REACT_APP_KEY}`)
-        .then(response=>{
-            this.setState({
-                events: response.data.resultsPage.results.event,
-                favorites: user.favorites
+        .then(external=>{
+            
+            Axios({
+                method: "GET",
+                url: `${process.env.REACT_APP_API}/auth/favorites/${user._id}`
             })
+            .then(response=>{
+                this.setState({
+                    favorites: response.data,
+                    events: external.data.resultsPage.results.event,
+
+                })
+            })
+            .catch(error=>console.log(error))
         })
         .catch(error=>{
             console.log(error)
@@ -33,7 +43,7 @@ class Event extends Component {
     componentDidUpdate(prevState){
         let user = JSON.parse(localStorage.getItem('user'))
 
-        axios.get(`${process.env.REACT_APP_API}/auth/favorites/${user._id}`)
+        Axios.get(`${process.env.REACT_APP_API}/auth/favorites/${user._id}`)
         .then(response=>{
             if(prevState.favorites !== response.data){
                 this.setState({
@@ -47,6 +57,7 @@ class Event extends Component {
         
         let user = JSON.parse(localStorage.getItem('user'))
 
+        
         let favoritesCopy = [...this.state.favorites]
 
         favoritesCopy.push(eventId)
@@ -55,10 +66,9 @@ class Event extends Component {
             favorites: favoritesCopy
             })
 
-        axios({
+        Axios({
             method: "GET",
             url: `${process.env.REACT_APP_API}/auth/add/${user._id}?image=${image}&artistName=${artistName}&venueName=${venueName}&eventId=${eventId}&artistId=${artistId}`
-            // withCredentials: true
         })
         .then(response=>{
             console.log(response);
@@ -77,7 +87,22 @@ class Event extends Component {
         return false
     }
 
+    toggleHover = (eventId) => {
+        
+        Axios.get(`${process.env.REACT_APP_API}/auth/favorites/hover/${eventId}`)
+        .then(response=>{                     
+            this.setState({
+                selectedEvents: response.data,
+                hover: eventId
+            })
+        })
+        .catch(error=>{             
+            console.log(error)
+        })
+    }
+
     deleteHandler = (eventId) => {
+        
         let user = JSON.parse(localStorage.getItem("user"));
 
         axios({
@@ -90,6 +115,12 @@ class Event extends Component {
             })
         })
         .catch(error=>console.log(error))
+    }
+
+    clearHoverState = () => {
+        this.setState({
+            hover: false
+        })
     }
 
     render(){
@@ -110,8 +141,23 @@ class Event extends Component {
                             <h4 className="card-title">{event.performance[0].artist.displayName}</h4>
                             <p className="card-text">{event.venue.displayName}</p>
                             <Link to={`/event-details/${event.id}`} className="btn btn-primary">Event Details</Link>
-                            {this.displayHeart(event) ? <i onClick={()=>this.deleteHandler(event.id)} className="fa fa-heart float-right btn-lg" style={{color: "red"}}></i> : <i className="fa fa-heart float-right btn-lg" style={{color: "black"}} name={event.id} onClick={() => {this.clickHandler(event.performance[0].artist.uri, event.performance[0].artist.displayName, event.venue.displayName, event.id, event.performance[0].artist.id)}}></i>}
-                           {/* {this.state.favorites.includes(event.id) ? <i className="fa fa-heart float-right btn-lg" style={{color: "red"}}></i> : <i className="fa fa-heart float-right btn-lg" style={{color: "black"}} name={event.id} onClick={() => {this.clickHandler(event.performance[0].artist.uri, event.performance[0].artist.displayName, event.venue.displayName, event.id, event.performance[0].artist.id)}}></i>}  */}
+                            {this.displayHeart(event) ? 
+                            (
+                            <>
+                            <div onMouseEnter={()=>this.toggleHover(event.id)} onMouseLeave={this.clearHoverState} className="h-50">
+                            <i onClick={()=>this.deleteHandler(event.id)} className="fa fa-heart float-right btn-lg" style={{color: "red"}}></i>
+                            </div>
+                            {this.state.hover === event.id ? 
+                            <div className="border w-75 mt-2 ml-3">
+                                <h4>People with common interests!!</h4>
+                                {this.state.selectedEvents.map(event=>(                                    
+                                    <li className="lead font-weight-bold">{event.userId.username}</li>
+                                ))}
+                            </div>                            
+                            : ""}
+                            </>
+                            )
+                            : <div className="h-50"><i className="fa fa-heart float-right btn-lg" style={{color: "black"}} name={event.id} onClick={() => {this.clickHandler(event.performance[0].artist.uri, event.performance[0].artist.displayName, event.venue.displayName, event.id, event.performance[0].artist.id)}}></i></div>}
                         </div>
                     </div>
                 ))}
@@ -124,5 +170,3 @@ class Event extends Component {
 }
 
 export default Event
-
-//doing unclick for removing favorite

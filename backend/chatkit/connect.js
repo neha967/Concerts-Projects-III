@@ -8,20 +8,21 @@ const chatkit = new Chatkit.default({
   });
 
 app.post('/users', (req, res) => {
-    const { userId } = req.body;
+    debugger    
+    const { username } = req.body;
 
     chatkit
       .createUser({
-        id: userId,
-        name: userId,
+        id: username,
+        name: username,
       })
       .then(() => {
-        res.sendStatus(201);
+        res.json(username);
       })
       .catch(err => {
         if (err.error === 'services/chatkit/user_already_exists') {
-          console.log(`User already exists: ${userId}`);
-          res.sendStatus(200);
+          console.log(`User already exists: ${username}`);
+          res.json(username);
         } else {
           res.status(err.status).json(err);
         }

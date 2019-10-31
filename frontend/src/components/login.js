@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "../utils/axiosInstance"
 
 class Login extends Component {
 
@@ -59,6 +59,7 @@ class Login extends Component {
                     <div>
                         <button type="submit" className="btn btn-lg btn-primary">Login</button>
                     </div>
+                    <a href="/auth/send-reset">Forgot Password?</a>
                 </form>
             </div>
         )

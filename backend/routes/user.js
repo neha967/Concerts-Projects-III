@@ -3,8 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
 const User = require(".././models/users");
-const Favorites = require("../models/favorites");
-const passport = require("passport");
+const transporter = require("../mailer/mailer");
+var createError = require('http-errors');
+var jwt = require('jsonwebtoken');
 
 router.post("/signup", (req,res,next) => {
 
@@ -39,7 +40,7 @@ router.post("/signup", (req,res,next) => {
         newUser.save()
         .then(user => {
             req.session.user = user
-            res.json(user)            
+            res.json(user)          
         })
     })
     .catch(error => {
@@ -79,60 +80,73 @@ router.post("/login", (req,res,next) => {
     })
 })
 
-router.get("/add/:userId", (req,res,next)=>{
-    debugger
-    let newFavorite = new Favorites ({
-        image: req.query.image,
-        artistName: req.query.artistName,
-        venueName: req.query.venueName,
-        artistId: req.query.artistId,
-        eventId: req.query.eventId,
-        userId: req.params.userId
-    })
+// router.post("/fb-login", (req,res)=> {
+//     User.findOne({"facebookId": req.body.facebookId})
+//         .then((user)=> {
+//             debugger
+//             if(!user){
 
+//                 let fbUser = new User({
+//                     username: req.body.username,
+//                     email: req.body.email,
+//                     facebookId: req.body.facebookId
+//                 })
 
-    newFavorite.save()
-    .then(favorite=>{
-        res.json(favorite)
-    })
-    .catch(error=>{
-        console.log(error)
+//                 fbUser.save()
+//                 .then(user=>{
+//                     req.session.user = user
+//                     res.json(user)
+//                 })
+//                 .catch(error=>console.log(error))
+
+//             } else{
+//                 req.session.user = user
+//                 res.json(user)
+//             }
+//         })
+//         .catch(error=>console.log(error))
+// })
+
+router.post("/send-reset", (req,res)=> {
+    jwt.sign({email: req.body.email}, process.env.jwtSecret, { expiresIn: 60 * 60 }, function(err, token){
+        
+        if(err) next(createError(500))        
+        else {
+                transporter.sendMail({
+                from: `"Concerts" <concerts@concerts.com>`, 
+                to: req.body.email, 
+                subject: 'Reset your password ✔', 
+                text: 'Hello world?', 
+                html: `<b>Password reset: <a href="http://localhost:3000/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
+            })
+            .then((result)=> {
+                debugger
+                res.send("Check Your Email")
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
+    }
     })
 })
 
-router.get("/favorites/:userId", (req,res,next)=>{
-    Favorites.find({userId: req.params.userId})
-    .then(favorites=>{
-        res.json(favorites)
-    })
-    .catch(error=>{
-        console.log(error)
-    })
-})
-
-router.post("/favorites/delete/:userId/:eventId", (req,res,next)=>{
-    Favorites.findOneAndDelete({userId: req.params.userId, eventId: req.params.eventId})
-    .then(()=>{
-        Favorites.find({userId: req.params.userId})
-        .then(favorites=>{
-            res.json(favorites)
+router.post("/reset-password", (req,res)=> {
+    jwt.verify(req.body.token, process.env.jwtSecret, function(err, token){
+        if(err) res.send(err)
+        bcrypt.hash(req.body.password, 10, function(err, hash){
+            if(err) res.send(err)
+            else {
+                User.findOneAndUpdate({email: token.email}, {password: hash})
+                .then((result)=> {
+                    res.send("updated")
+                })
+                .catch((err)=> {
+                    res.send(err)
+                })
+            }
         })
     })
-    .catch(error=>{
-        console.log(error)
-    })
 })
-
-router.get("/facebook", passport.authenticate("facebook", {
-    scope: ["profile"]
-}))
-
-//call back route for google to redirect to
-router.get("/google/redirect", passport.authenticate("facebook", { failureRedirect: '/login' }), (req, res) => {
-//redirect to home page
-    res.redirect("/home")
-})
-
 
 router.get("/logout", (req, res)=> {
     req.session.destroy();
