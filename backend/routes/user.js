@@ -45,6 +45,7 @@ router.post("/signup", (req,res,next) => {
     })
     .catch(error => {
         console.log(error)
+        res.status(500).send(error)
     })
 })
 
@@ -89,7 +90,7 @@ router.post("/send-reset", (req,res)=> {
                 from: `"Concerts" <concerts@concerts.com>`, 
                 to: req.body.email, 
                 subject: 'Reset your password ✔', 
-                text: 'Hello world?', 
+                text: 'Hello world?',
                 html: `<b>Password reset: <a href="https://ironhack-concerts.herokuapp.com/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
             })
             .then((result)=> {

@@ -21,9 +21,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
-if(process.env.ENVIRONMENT === "DEVELOPMENT"){
+if(process.env.environment === "DEVELOPMENT"){
   app.use(cors({
-    "origin": `${process.env.HOST}:${process.env.PORT}`,
+    "origin": `${process.env.HOST}:${process.env.CLIENTPORT}`,
     "credentials": true
   }));  
 }
