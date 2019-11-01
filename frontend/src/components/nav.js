@@ -14,22 +14,22 @@ class Nav extends Component {
     
     render(){
         return(
-            <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
+            <nav className="navbar navbar-expand-lg  bg-primary navbar-dark">
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
+                <ul className="navbar-nav bg-primary">
+                    <li className="nav-item hide-overflow">
                     <Link className="nav-link display-4 font-weight-bold" to={"/home"}>Home |</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item hide-overflow">
                     <Link className="nav-link display-4 font-weight-bold" to={"/favorites"}>Favorites |</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item hide-overflow">
                     <Link className="nav-link display-4 font-weight-bold" to={"/connect"}>Connect |</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item hide-overflow">
                     <Link className="nav-link display-4 font-weight-bold" to={"/"} onClick={this.logoutHandler}>Logout</Link>
                     </li>
                 </ul>

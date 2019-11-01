@@ -1,3 +1,6 @@
+nav .hide-overflow {
+  overflow: hidden;
+}
 .bg-img {
   background: url("./images/event-bg.jpg") center no-repeat;
   background-size: cover;
