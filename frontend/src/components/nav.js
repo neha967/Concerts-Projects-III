@@ -21,16 +21,16 @@ class Nav extends Component {
             <div className="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                    <Link className="nav-link display-4 font-weight-bold" to="/home">Home |</Link>
+                    <Link className="nav-link display-4 font-weight-bold" to={"/home"}>Home |</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link display-4 font-weight-bold" to="/favorites">Favorites |</Link>
+                    <Link className="nav-link display-4 font-weight-bold" to={"/favorites"}>Favorites |</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link display-4 font-weight-bold" to="/connect">Connect |</Link>
+                    <Link className="nav-link display-4 font-weight-bold" to={"/connect"}>Connect |</Link>
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link display-4 font-weight-bold" to="/" onClick={this.logoutHandler}>Logout</Link>
+                    <Link className="nav-link display-4 font-weight-bold" to={"/"} onClick={this.logoutHandler}>Logout</Link>
                     </li>
                 </ul>
             </div>

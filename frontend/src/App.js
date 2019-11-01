@@ -47,7 +47,10 @@ class App extends Component {
   }
 
   navDisplay = () => {
-    if(this.props.location.pathname === "/" || this.props.location.pathname === "/home" || this.props.location.pathname === "/auth/signup" || this.props.location.pathname === "/auth/login"){
+    let resetRoute = "/auth/reset-password"
+    let path = this.props.location.pathname
+
+    if(this.props.location.pathname === "/" || this.props.location.pathname === "/home" || this.props.location.pathname === "/auth/signup" || this.props.location.pathname === "/auth/login" || path.indexOf(resetRoute) >= 0 || this.props.location.pathname === "/auth/send-reset"){
       return true
     }
   }
@@ -65,7 +68,7 @@ class App extends Component {
         <PrivateRoute path="/connect" exact component={Connect} loggedIn={this.state.loggedIn}/>
         <Route path="/auth/signup" exact render={(routeProps)=> <Signup {...routeProps} user={this.checkForUserStatus}/>}/>
         <Route path="/auth/send-reset" exact render={(routeProps)=> <SendReset {...routeProps} user={this.checkForUserStatus}/>}/>
-        <Route path="/auth/reset-password" exact render={(routeProps)=> <Reset {...routeProps} user={this.checkForUserStatus}/>}/>
+        <Route path="/auth/reset-password/:token" exact render={(routeProps)=> <Reset {...routeProps} user={this.checkForUserStatus}/>}/>
         <Route path="/auth/login" exact render={(routeProps)=> <Login {...routeProps} user={this.checkForUserStatus}/>}/>
       </>
     );

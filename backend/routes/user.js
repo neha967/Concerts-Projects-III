@@ -91,7 +91,7 @@ router.post("/send-reset", (req,res)=> {
                 to: req.body.email, 
                 subject: 'Reset your password ✔', 
                 text: 'Hello world?',
-                html: `<b>Password reset: <a href="https://ironhack-concerts.herokuapp.com/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
+                html: `<b>Password reset: <a href="https://ironhack-concerts.herokuapp.com/auth/reset-password/${token}">Reset your password</a></b>` // html body
             })
             .then((result)=> {
                 debugger
@@ -105,10 +105,11 @@ router.post("/send-reset", (req,res)=> {
 })
 
 router.post("/reset-password", (req,res)=> {
-    jwt.verify(req.body.token, process.env.jwtSecret, function(err, token){
-        if(err) res.send(err)
+    debugger
+    jwt.verify(req.query.token, process.env.jwtSecret, function(err, token){
+        if(err) { debugger; res.send(err) }
         bcrypt.hash(req.body.password, 10, function(err, hash){
-            if(err) res.send(err)
+            if(err) { debugger; res.send(err) }
             else {
                 User.findOneAndUpdate({email: token.email}, {password: hash})
                 .then((result)=> {

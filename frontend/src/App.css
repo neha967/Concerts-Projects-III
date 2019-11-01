@@ -14,10 +14,15 @@ input {
   height: 50vh;
 }
 
-.signup-div, .login-div {
+.signup-div, .login-div, .send-div, .reset-div {
   background: url("./images/event-bg.jpg") center no-repeat;
   background-size: cover;
   height: 100vh;
+}
+
+nav {
+  height: 10vh !important;
+  box-sizing: border-box !important;
 }
 
 .oops {
