@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "../utils/axiosInstance"
 
 class Reset extends Component{
 
@@ -7,7 +8,7 @@ class Reset extends Component{
 
         this.props.user()
 
-        this.props.history.push("/send-reset")
+        axios.post(`${process.env.REACT_APP_API}/auth/reset-password`, )
     }
 
     render(){

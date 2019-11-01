@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "../utils/axiosInstance"
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 class Nav extends Component {
 
@@ -21,16 +21,16 @@ class Nav extends Component {
             <div className="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                    <a className="nav-link display-4 font-weight-bold" href="/home">Home |</a>
+                    <Link className="nav-link display-4 font-weight-bold" to="/home">Home |</Link>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link display-4 font-weight-bold" href="/favorites">Favorites |</a>
+                    <Link className="nav-link display-4 font-weight-bold" to="/favorites">Favorites |</Link>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link display-4 font-weight-bold" href="/connect">Connect |</a>
+                    <Link className="nav-link display-4 font-weight-bold" to="/connect">Connect |</Link>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link display-4 font-weight-bold" href="/" onClick={this.logoutHandler}>Logout</a>
+                    <Link className="nav-link display-4 font-weight-bold" to="/" onClick={this.logoutHandler}>Logout</Link>
                     </li>
                 </ul>
             </div>

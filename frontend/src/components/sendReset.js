@@ -30,7 +30,6 @@ class SendReset extends Component{
             this.setState({
                 successMessage: response.data
             })
-            this.props.history.push("/auth/reset-password")
         })
         .catch(error=>console.log(error))
     }
